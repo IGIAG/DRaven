@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/draven
+draven.so
+draven.dylib
+draven.dll
+draven.a
+draven.lib
+draven-test-*
+*.exe
+*.o
+*.obj
+*.lst
