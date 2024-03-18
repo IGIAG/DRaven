@@ -8,6 +8,8 @@ import std.conv;
 
 import std.stdio;
 
+
+
 class DocumentStore
 {
     private string database_name = "";
@@ -22,6 +24,7 @@ class DocumentStore
 
     public RavenQueryResult run_query(string rql, int start, int page_size)
     {
+        
         Request re = *new Request();
 
         JSONValue request_body = *new JSONValue();
@@ -59,9 +62,13 @@ class DocumentStore
                 "id": id
             ]);
 
-        if (rs.code != 200)
+        if (rs.code == 404)
         {
             throw new Exception("Document " ~ id ~ " not found!");
+        }
+        if (rs.code != 200)
+        {
+            throw new Exception("Reading " ~ id ~ " errored out!");
         }
         return parseJSON(to!string(rs.responseBody()));
     }
