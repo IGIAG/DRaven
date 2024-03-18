@@ -67,9 +67,7 @@ class DocumentStore
     }
 
     public RavenResultStatus store_document(JSONValue document,string collection,string id){
-        if(!document["@metadata"]["@collection"].isNull()){
-            throw new Exception("Do not set collection in the JSONValue!");
-        }
+        document["@metadata"] = *new JSONValue();
         document["@metadata"]["@collection"] = collection;
 
         Request re = *new Request();
@@ -80,7 +78,7 @@ class DocumentStore
 
         string re_body = document.toString();
 
-        Response rs = re.post(re_uri ~ "?id=" ~ id, re_body, "text/json");
+        Response rs = re.put(re_uri ~ "?id=" ~ id, re_body, "text/json");
 
         switch(rs.code){
             case 200:
@@ -88,6 +86,7 @@ class DocumentStore
             case 201:
                 return RavenResultStatus.UPDATED;
             default:
+                writeln(rs.responseBody());
                 return RavenResultStatus.ERROR;
         }
     }
